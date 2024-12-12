@@ -22,8 +22,8 @@ class CroCoNet(nn.Module):
 
     def __init__(self,
                  img_size=224,           # input image size
-                 patch_size=16,          # patch_size 
-                 mask_ratio=0.9,         # ratios of masked tokens 
+                 patch_size=16,          # patch_size
+                 mask_ratio=0.9,         # ratios of masked tokens
                  enc_embed_dim=768,      # encoder feature dimension
                  enc_depth=12,           # encoder depth 
                  enc_num_heads=12,       # encoder number of heads in the transformer block 
