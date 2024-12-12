@@ -121,7 +121,8 @@ class PointCloudOptimizer(BasePCOptimizer):
     def _set_focal(self, idx, focal, force=False):
         param = self.im_focals[idx]
         if param.requires_grad or force:  # can only init a parameter not already initialized
-            param.data[:] = self.focal_break * np.log(focal)
+            param.data[:] = torch.tensor(self.focal_break * np.log(focal), dtype=param.dtype, device=param.device)
+            #param.data[:] = self.focal_break * np.log(focal) # 위에 오류나서 예원 수정
         return param
 
     def get_focals(self):

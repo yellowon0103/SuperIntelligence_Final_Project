@@ -1,10 +1,11 @@
 #! /bin/bash
 
-GPU_ID=6
-DATA_ROOT_DIR="/ssd2/zhiwen/projects/InstantSplat/data"
+GPU_ID=0
+DATA_ROOT_DIR="/home/asc/PycharmProjects/SuperIntelligenc_Project/InstantSplat/data"
 DATASETS=(
     # TT
-    sora
+    #sora ###
+    yewon
     # mars
     )
 
@@ -14,11 +15,13 @@ SCENES=(
     # Francis
     # Horse
     # Ignatius
-    santorini
+    #santorini ###
+    test
     )
 
 N_VIEWS=(
-    3
+    2
+    # 3 ###
     # 5
     # 9
     # 12

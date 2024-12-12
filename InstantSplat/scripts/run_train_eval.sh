@@ -1,7 +1,7 @@
 #! /bin/bash
 
-GPU_ID=1
-DATA_ROOT_DIR="/ssd2/zhiwen/projects/InstantSplat/data"
+GPU_ID=0
+DATA_ROOT_DIR="/home/asc/PycharmProjects/SuperIntelligenc_Project/InstantSplat/data"
 DATASETS=(
     TT
     # MVimgNet
