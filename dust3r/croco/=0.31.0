@@ -1,0 +1,3 @@
+Requirement already satisfied: referencing in /home/asc/anaconda3/envs/Super_dust3r/lib/python3.9/site-packages (0.30.2)
+Requirement already satisfied: attrs>=22.2.0 in /home/asc/anaconda3/envs/Super_dust3r/lib/python3.9/site-packages (from referencing) (23.2.0)
+Requirement already satisfied: rpds-py>=0.7.0 in /home/asc/anaconda3/envs/Super_dust3r/lib/python3.9/site-packages (from referencing) (0.10.6)
