@@ -2,3 +2,7 @@ dust3r/croco/habitat-sim-data/versioned_data/habitat_test_scenes/apartment_1.glb
 dust3r/croco/habitat-sim-data/versioned_data/habitat_test_scenes/skokloster-castle.glb
 dust3r/croco/habitat-sim-data/versioned_data/habitat_test_scenes/van-gogh-room.glb
 dust3r/croco/habitat-sim-data/versioned_data/habitat_test_scenes/van-gogh-room.mesh.ply
+dust3r/croco/pretrained_models/CroCo.pth
+dust3r/croco/pretrained_models/CroCo_V2_ViTLarge_BaseDecoder.pth
+dust3r/dust3r/checkpoints/DUSt3R_ViTLarge_BaseDecoder_512_dpt.pth
+InstantSplat/submodules/dust3r/checkpoints/DUSt3R_ViTLarge_BaseDecoder_512_dpt.pth
