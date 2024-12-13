@@ -5,7 +5,7 @@ DATA_ROOT_DIR="/home/asc/PycharmProjects/SuperIntelligenc_Project/InstantSplat/d
 DATASETS=(
     # TT
     #sora ###
-    yewon
+    yewon8imgs
     # mars
     )
 
@@ -20,7 +20,7 @@ SCENES=(
     )
 
 N_VIEWS=(
-    2
+    8
     # 3 ###
     # 5
     # 9

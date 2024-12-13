@@ -26,6 +26,21 @@ from dust3r.cloud_opt import global_aligner, GlobalAlignerMode
 
 import matplotlib.pyplot as pl
 
+from pytorch3dRenderingAdapter import Rendering_Adapter
+import cv2
+import torch.nn.functional as F
+from pytorch3d.structures import Pointclouds
+from pytorch3d.renderer import (
+    PerspectiveCameras,
+    PointsRasterizationSettings,
+    PointsRenderer,
+    PointsRasterizer,
+    AlphaCompositor
+)
+from pytorch3d.utils import cameras_from_opencv_projection
+from pytorch3d.transforms import quaternion_to_matrix, matrix_to_quaternion
+import matplotlib.pyplot as plt
+
 
 def get_args_parser():
     parser = argparse.ArgumentParser()
@@ -149,6 +164,35 @@ def get_reconstructed_scene(outdir, model, device, silent, image_size, filelist,
         scenegraph_type = scenegraph_type + "-" + str(refid)
 
     pairs = make_pairs(imgs, scene_graph=scenegraph_type, prefilter=None, symmetrize=True)
+
+    ###############################
+
+    # resize 된 이미지 저장 (필요할 때 주석 해제하기)
+    for img_data in imgs:
+        idx = img_data['idx']
+        tensor = img_data['img'] # -1 ~ 1 로 정규화됨
+
+        # 텐서 값을 [0, 1] 범위로 변환
+        tensor = (tensor + 1) / 2
+        tensor = tensor.clip(0, 1)
+
+        # 텐서를 NumPy 배열로 변환, squeeze로  [1, C, H, W] -> [C, H, W]
+        image = tensor.squeeze().permute(1, 2, 0).numpy() # PyTorch 텐서의 기본 형식 [C, H, W](채널, 높이, 너비)를 NumPy 배열 형식 [H, W, C](높이, 너비, 채널)로 변경
+
+        # 이미지를 파일로 저장
+        image_uint8 = (image * 255).astype(np.uint8)
+        # 채널 순서 변경 (RGB -> BGR)
+        image_bgr = cv2.cvtColor(image_uint8, cv2.COLOR_RGB2BGR)
+        cv2.imwrite(f'/home/asc/PycharmProjects/SuperIntelligenc_Project/dust3r/outputs/Resized_Image_{idx}.png', image_bgr)
+
+    print("이미지가 성공적으로 저장되었습니다.")
+
+    #restored_image = cv2.imread('/home/asc/PycharmProjects/0624DUSt3R/Resized_Image_1.png') # image_bgr랑 값이 같아야함
+    #restored_image = cv2.cvtColor(restored_image, cv2.COLOR_RGB2BGR) / 255.0 # 나누기 전에 image_uint8 랑 같음
+
+
+    ################################3
+
     output = inference(pairs, model, device, batch_size=1, verbose=not silent)
 
     mode = GlobalAlignerMode.PointCloudOptimizer if len(imgs) > 2 else GlobalAlignerMode.PairViewer
@@ -157,6 +201,18 @@ def get_reconstructed_scene(outdir, model, device, silent, image_size, filelist,
 
     if mode == GlobalAlignerMode.PointCloudOptimizer:
         loss = scene.compute_global_alignment(init='mst', niter=niter, schedule=schedule, lr=lr)
+
+    ############################################################################################
+    # Rendering code
+    # 이미지 개수에 맞게 Rendering_Adapter 실행하는 코드
+    pts_num_list = list(range(scene.n_imgs))  # [0, 1, ..., n_imgs-1]
+
+    for cam_num in range(scene.n_imgs):
+        cam_num_list = [cam_num]  # 현재 카메라 번호를 리스트로 만듦
+        Rendering_Adapter(scene, cam_num_list, pts_num_list)
+    Rendering_Adapter(scene, [999], [0]) # 만약에 인풋 이미지가 0,1로 2장일때 지금 0.5카메라 뷰로 렌더링 하고싶어서
+    Rendering_Adapter(scene, [999], [1])  # 만약에 인풋 이미지가 0,1로 2장일때 지금 0.5카메라 뷰로 렌더링 하고싶어서
+    ####################################################################################################################
 
     outfile = get_3D_model_from_scene(outdir, silent, scene, min_conf_thr, as_pointcloud, mask_sky,
                                       clean_depth, transparent_cams, cam_size)
